@@ -133,6 +133,17 @@ module CASClient
     end
     alias validate_proxy_ticket validate_service_ticket
 
+    # A way to make authenticated requests.
+    def auth_request(uri)
+      https = https_connection(uri)
+
+      raw_res = https.start do |conn|
+        conn.get("#{uri.path}?#{uri.query}")
+      end
+
+      return raw_res
+    end
+
     # Returns true if the configured CAS server is up and responding;
     # false otherwise.
     def cas_server_is_up?
